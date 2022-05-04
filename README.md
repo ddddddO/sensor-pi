@@ -13,6 +13,7 @@
 ### ACEIRMC BME280搭載 温湿度 気圧センサーモジュール 5V用 SPI I2C Arduino対応 Raspberry Pi 4個入り
 - 画像の紫色のセンサー
 - 2022/05/03購入。4個で5099円
+- 書籍で使われてるものと違うものを購入したよう。が、読み替えて利用できそう。
 - https://www.amazon.co.jp/dp/B08L6J5MLM?ref=ppx_pop_dt_b_product_details&th=1
 
 ## links
