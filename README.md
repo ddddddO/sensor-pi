@@ -21,3 +21,9 @@
   - https://github.com/nozo-moto/mhz19-bme280-go
 - http://www.dododo.site/posts/raspberry-pi-4%E3%82%92lab%E3%81%AB%E3%81%99%E3%82%8B/
 - https://github.com/ddddddO/embedded-using-wio_terminal
+- bme280
+  - https://github.com/nozo-moto/mhz19-bme280-go#how-to-move
+  - リンク先の配線で動作確認済み
+- mh_z19
+  - https://pypi.org/project/mh-z19/
+  - リンク先の配線で動作確認済み
