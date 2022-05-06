@@ -31,3 +31,6 @@
 - http://www.dododo.site/posts/raspberry-pi-4%E3%82%92lab%E3%81%AB%E3%81%99%E3%82%8B/
 - https://github.com/ddddddO/embedded-using-wio_terminal
 - [作業風景](https://twitter.com/dddddO60664252/status/1521839460744560641?s=20&t=knhCAdHZW9eIZJTtrOVSxA)
+
+- [raspberry pi GPIO](https://deviceplus.jp/raspberrypi/raspberrypi-gpio/)
+  - ![](image/raspberrypi-gpio.png)
