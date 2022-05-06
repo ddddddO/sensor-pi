@@ -3,7 +3,7 @@
 - Raspberry Pi 4とsensor類をつなげてみる
 
 ## sensor
-![](sensor.jpg)
+![](image/sensor.jpg)
 
 ### LaDicha MH-Z19 0-5000PPM CO2室内空気質モニタ用赤外線CO2センサUART / PWM
 - 画像の金色のセンサー
