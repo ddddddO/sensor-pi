@@ -12,3 +12,6 @@ bme280:
 # sudo pip3 install mh_z19
 mhz19:
 	sudo python3 -m mh_z19
+
+run:
+	sudo go run *.go
