@@ -34,3 +34,20 @@
 
 - [raspberry pi GPIO](https://deviceplus.jp/raspberrypi/raspberrypi-gpio/)
   - ![](image/raspberrypi-gpio.png)
+- 「RaspberryPiで学ぶ電子工作(https://bluebacks.kodansha.co.jp/books/9784065193396/appendix/)」
+  - I2C(p159~)
+    - シリアル通信と呼ばれるデータ通信方式の一つ
+    - I2C通信を使うと、デジタル値を出力するセンサを多数扱える
+      - センサに、センサとADコンバータが内臓されているため、内部のセンサが出力するアナログ値->ADコンバータ->デジタル値出力、となるから、I2Cで扱える
+    - マスター・スレーブというふうにデバイスを捉える
+      - 今回なら、RaspberryPiがマスターで、BME280がスレーブ
+      - スレーブにはアドレスという概念がある
+    - マスター・スレーブの各デバイスは、SDAとSCLの2線で接続される
+      - SDA: シリアルデータ
+      - SCL: シリアルクロック
+      - (本来、I2C接続にはプルアップ抵抗なるものが必要だが、RaspberryPiに内蔵されている)
+    - マスター・スレーブを接続し、`i2cdetect -y 1` コマンドをマスターで実行すると、スレーブのアドレスを取得できる、と理解
+      - 今回なら、`76` がBME280のアドレス
+    - 各センサの仕様を確認しないと、そのセンサのアドレスや、どのレジスタ(のアドレス)からデータの読み書きをすればいいかわからない
+      - [BME280のデータシート](https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME280-DS002.pdf)
+        - [実装](https://github.com/nozo-moto/mhz19-bme280-go/blob/master/bme280/bme280.go)
