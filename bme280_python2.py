@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #coding: utf-8
 
 # copied from https://github.com/SWITCHSCIENCE/samplecodes/blob/master/BME280/Python27/bme280_sample.py
