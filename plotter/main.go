@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"image/color"
 	"os"
+	"path/filepath"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -13,6 +14,9 @@ import (
 	"gonum.org/v1/plot/vg"
 	"gonum.org/v1/plot/vg/draw"
 )
+
+var dir = "/home/pi/github.com/ddddddO/sensor-pi/" // raspberry pi
+// var dir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/environment.sqlite3" // wsl
 
 // FIXME: 日時の取り扱い
 // ref: https://github.com/gonum/plot/wiki/Example-plots#more-detailed-style-settings
@@ -57,7 +61,7 @@ func main() {
 	p.Add(lpLine, lpPoints)
 	// p.Legend.Add("line points", lpLine, lpPoints)
 
-	if err := p.Save(4*vg.Inch, 4*vg.Inch, "pressure.png"); err != nil {
+	if err := p.Save(4*vg.Inch, 4*vg.Inch, filepath.Join(dir, "plotter", "pressure.png")); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
@@ -69,8 +73,7 @@ type datum struct {
 }
 
 func fetchData() ([]datum, error) {
-	const dsn = "/home/pi/github.com/ddddddO/sensor-pi/environment.sqlite3" // raspberry pi
-	//const dsn = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/environment.sqlite3" // wsl
+	var dsn = filepath.Join(dir, "environment.sqlite3")
 	db, err := sql.Open("sqlite3", dsn)
 	if err != nil {
 		return nil, err
