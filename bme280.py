@@ -4,6 +4,8 @@
 # copied from https://github.com/SWITCHSCIENCE/samplecodes/blob/master/BME280/Python27/bme280_sample.py
 from smbus2 import SMBus
 import time
+import datetime
+import sqlite3
 
 class BME280:
 	def __init__(self):
@@ -153,10 +155,24 @@ class BME280:
 		self.writeReg(0xF4,ctrl_meas_reg)
 		self.writeReg(0xF5,config_reg)
 	
-	def store(self):
-		print(self.result_T) # e.g. 27.9
-		print(self.result_P) # e.g. 997.31
-		print(self.result_H) # e.g. 57.1
+	def result(self) -> (float, float, float):
+		# print(self.result_T) # e.g. 27.9
+		# print(self.result_P) # e.g. 997.31
+		# print(self.result_H) # e.g. 57.1
+		return self.result_T, self.result_P, self.result_H
+
+class Repository:
+	def __init__(self, dsn) -> None:
+		self.conn = sqlite3.connect(dsn)
+
+	def store(self, temperature, pressure, humidity):
+		cur = self.conn.cursor()
+		date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+		cur.execute('insert into environment(date, temperature, pressure, humidity) values(?, ?, ?, ?)', (date, temperature, pressure, humidity))
+		self.conn.commit()
+
+	def close(self):
+		self.conn.close()
 
 
 if __name__ == '__main__':
@@ -164,7 +180,12 @@ if __name__ == '__main__':
 		bme280 = BME280()
 		bme280.get_calib_param()
 		bme280.readData()
-		# bme280.store()
+		t, p, h = bme280.result()
+
+		dsn = 'environment.sqlite3'
+		repo = Repository(dsn)
+		repo.store(t, p, h)
+		repo.close()
 	except KeyboardInterrupt:
 		pass
 
