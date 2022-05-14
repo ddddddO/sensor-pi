@@ -17,6 +17,11 @@ class BME280:
 
 		self.t_fine = 0.0
 	
+		# FIXME:
+		self.result_T = 0.0
+		self.result_P = 0.0
+		self.result_H = 0.0
+
 		self.setup()
 
 	def writeReg(self, reg_address, data):
@@ -95,8 +100,11 @@ class BME280:
 		v1 = (self.digP[8] * (((pressure / 8.0) * (pressure / 8.0)) / 8192.0)) / 4096
 		v2 = ((pressure / 4.0) * self.digP[7]) / 8192.0
 		pressure = pressure + ((v1 + v2 + self.digP[6]) / 16.0)  
+		pressure = pressure/100
 
-		print("pressure : %7.2f hPa" % (pressure/100))
+		self.result_P = float("{:7.2f}".format(pressure))
+
+		print("pressure : %7.2f hPa" % (pressure))
 
 	def compensate_T(self, adc_T):
 		global t_fine
@@ -104,7 +112,11 @@ class BME280:
 		v2 = (adc_T / 131072.0 - self.digT[0] / 8192.0) * (adc_T / 131072.0 - self.digT[0] / 8192.0) * self.digT[2]
 		t_fine = v1 + v2
 		temperature = t_fine / 5120.0
-		print("temp : %-6.2f ℃" % (temperature))
+
+		self.result_T = float("{:-6.2f}".format(temperature))
+
+		result = "temp : {:-6.2f} ℃".format(temperature)
+		print(result)
 
 	def compensate_H(self, adc_H):
 		global t_fine
@@ -118,6 +130,9 @@ class BME280:
 			var_h = 100.0
 		elif var_h < 0.0:
 			var_h = 0.0
+		
+		self.result_H = float("{:6.2f}".format(var_h))
+
 		print("hum : %6.2f ％" % (var_h))
 
 
@@ -137,6 +152,11 @@ class BME280:
 		self.writeReg(0xF2,ctrl_hum_reg)
 		self.writeReg(0xF4,ctrl_meas_reg)
 		self.writeReg(0xF5,config_reg)
+	
+	def store(self):
+		print(self.result_T) # e.g. 27.9
+		print(self.result_P) # e.g. 997.31
+		print(self.result_H) # e.g. 57.1
 
 
 if __name__ == '__main__':
@@ -144,6 +164,7 @@ if __name__ == '__main__':
 		bme280 = BME280()
 		bme280.get_calib_param()
 		bme280.readData()
+		# bme280.store()
 	except KeyboardInterrupt:
 		pass
 
