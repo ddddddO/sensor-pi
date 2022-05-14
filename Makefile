@@ -5,15 +5,15 @@ i2c:
 
 # sudo apt-get update
 # sudo apt install -y python-smbus
-# sudo pip install smbus2
+# sudo pip3 install smbus2
 bme280:
-	 sudo ./bme280_python2.py
+	 sudo ./bme280.py
 
 # MEMO:
 # crontab -e
-# 0 9,18 * * * sudo /home/pi/github.com/ddddddO/sensor-pi/bme280_python2.py | /home/pi/github.com/ddddddO/sensor-pi/tweet.py
+# 0 9,18 * * * sudo /home/pi/github.com/ddddddO/sensor-pi/bme280.py | /home/pi/github.com/ddddddO/sensor-pi/tweet.py
 tweet:
-	sudo ./bme280_python2.py | ./tweet.py
+	sudo ./bme280.py | ./tweet.py
 
 # sudo pip3 install mh_z19
 mhz19:
