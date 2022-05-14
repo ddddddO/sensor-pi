@@ -5,3 +5,5 @@ create table environment(
     pressure real not null,
     humidity real not null
 );
+
+create index date_idx on environment(date);
