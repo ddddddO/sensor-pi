@@ -7,7 +7,7 @@ i2c:
 # sudo apt install -y python-smbus
 # sudo pip3 install smbus2
 bme280:
-	 sudo ./bme280.py
+	sudo ./bme280.py
 
 # MEMO:
 # crontab -e
@@ -22,4 +22,7 @@ mhz19:
 run:
 	sudo go run *.go
 
-# create database: sqlite3 environment.sqlite3
+# Create database: sqlite3 environment.sqlite3
+# Create table: execute schema.sql TODO: using migration tool
+conn:
+	sqlite3 environment.sqlite3
