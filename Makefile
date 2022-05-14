@@ -21,3 +21,5 @@ mhz19:
 
 run:
 	sudo go run *.go
+
+# create database: sqlite3 environment.sqlite3
