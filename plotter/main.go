@@ -15,21 +15,59 @@ import (
 	"gonum.org/v1/plot/vg/draw"
 )
 
+type Plot struct {
+	title                  string
+	imageName              string
+	yLabel, xLabel         string
+	lineColor, pointsColor color.RGBA
+}
+
+func newPressurePlot() *Plot {
+	pressurePlot := &Plot{
+		title:       "pressure @around tama river",
+		imageName:   "pressure.png",
+		yLabel:      "pressure",
+		xLabel:      "date",
+		lineColor:   color.RGBA{G: 255, A: 255},
+		pointsColor: color.RGBA{R: 255, A: 255},
+	}
+	return pressurePlot
+}
+
+// NOTE: 気温・湿度のグラフを生成する際に以下を編集する
+// func newTemperaturePlot() *Plot { return &Plot{} }
+// func newHumidityPlot() *Plot    { return &Plot{} }
+
+func (pt *Plot) Save(points plotter.XYs) error {
+	p := plot.New()
+	p.Title.Text = pt.title
+	p.Y.Label.Text = pt.yLabel
+	p.X.Label.Text = pt.xLabel
+	p.X.Tick.Marker = plot.TimeTicks{Format: "2006-01-02\n15:04"}
+	p.Add(plotter.NewGrid())
+
+	lpLine, lpPoints, err := plotter.NewLinePoints(points)
+	if err != nil {
+		return err
+	}
+	lpLine.Color = pt.lineColor
+	lpPoints.Shape = draw.PlusGlyph{}
+	lpPoints.Color = pt.pointsColor
+	p.Add(lpLine, lpPoints)
+	// p.Legend.Add("line points", lpLine, lpPoints)
+
+	if err := p.Save(4*vg.Inch, 4*vg.Inch, filepath.Join(baseDir, plotterDir, pt.imageName)); err != nil {
+		return err
+	}
+	return nil
+}
+
 // const baseDir = "/home/pi/github.com/ddddddO/sensor-pi/" // raspberry pi
 const baseDir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/" // wsl
 const plotterDir = "plotter"
 
 // ref: https://github.com/gonum/plot/wiki/Example-plots#more-detailed-style-settings
 func main() {
-	p := plot.New()
-
-	p.Title.Text = "pressure @around tama river"
-	p.Y.Label.Text = "pressure"
-	p.X.Label.Text = "date"
-	p.X.Tick.Marker = plot.TimeTicks{Format: "2006-01-02\n15:04"}
-
-	p.Add(plotter.NewGrid())
-
 	environment, err := fetchData()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
@@ -42,20 +80,8 @@ func main() {
 		os.Exit(1)
 	}
 
-	lpLine, lpPoints, err := plotter.NewLinePoints(points)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
-	lpLine.Color = color.RGBA{G: 255, A: 255}
-	lpPoints.Shape = draw.PlusGlyph{}
-	lpPoints.Color = color.RGBA{R: 255, A: 255}
-
-	p.Add(lpLine, lpPoints)
-	// p.Legend.Add("line points", lpLine, lpPoints)
-
-	var imageName = "pressure.png"
-	if err := p.Save(4*vg.Inch, 4*vg.Inch, filepath.Join(baseDir, plotterDir, imageName)); err != nil {
+	pressurePlot := newPressurePlot()
+	if err := pressurePlot.Save(points); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
