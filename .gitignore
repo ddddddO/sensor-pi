@@ -1,3 +1,4 @@
 settings.py
 __pycache__
 environment.sqlite3
+out/
