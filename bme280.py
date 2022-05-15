@@ -3,9 +3,6 @@
 
 # copied from https://github.com/SWITCHSCIENCE/samplecodes/blob/master/BME280/Python27/bme280_sample.py
 from smbus2 import SMBus
-import time
-import datetime
-import sqlite3
 
 class BME280:
 	def __init__(self):
@@ -18,7 +15,7 @@ class BME280:
 		self.digH = []
 
 		self.t_fine = 0.0
-	
+
 		# FIXME:
 		self.result_T = 0.0
 		self.result_P = 0.0
@@ -31,7 +28,7 @@ class BME280:
 
 	def get_calib_param(self):
 		calib = []
-		
+
 		for i in range (0x88,0x88+24):
 			calib.append(self.bus.read_byte_data(self.i2c_address,i))
 		calib.append(self.bus.read_byte_data(self.i2c_address,0xA1))
@@ -56,7 +53,7 @@ class BME280:
 		self.digH.append((calib[28]<< 4) | (0x0F & calib[29]))
 		self.digH.append((calib[30]<< 4) | ((calib[29] >> 4) & 0x0F))
 		self.digH.append( calib[31] )
-		
+
 		for i in range(1,2):
 			if self.digT[i] & 0x8000:
 				self.digT[i] = (-self.digT[i] ^ 0xFFFF) + 1
@@ -67,7 +64,7 @@ class BME280:
 
 		for i in range(0,6):
 			if self.digH[i] & 0x8000:
-				self.digH[i] = (-self.digH[i] ^ 0xFFFF) + 1  
+				self.digH[i] = (-self.digH[i] ^ 0xFFFF) + 1
 
 	def readData(self):
 		data = []
@@ -76,7 +73,7 @@ class BME280:
 		pres_raw = (data[0] << 12) | (data[1] << 4) | (data[2] >> 4)
 		temp_raw = (data[3] << 12) | (data[4] << 4) | (data[5] >> 4)
 		hum_raw  = (data[6] << 8)  |  data[7]
-		
+
 		self.compensate_T(temp_raw)
 		self.compensate_P(pres_raw)
 		self.compensate_H(hum_raw)
@@ -84,14 +81,14 @@ class BME280:
 	def compensate_P(self, adc_P):
 		global  t_fine
 		pressure = 0.0
-		
+
 		v1 = (t_fine / 2.0) - 64000.0
 		v2 = (((v1 / 4.0) * (v1 / 4.0)) / 2048) * self.digP[5]
 		v2 = v2 + ((v1 * self.digP[4]) * 2.0)
 		v2 = (v2 / 4.0) + (self.digP[3] * 65536.0)
 		v1 = (((self.digP[2] * (((v1 / 4.0) * (v1 / 4.0)) / 8192)) / 8)  + ((self.digP[1] * v1) / 2.0)) / 262144
 		v1 = ((32768 + v1) * self.digP[0]) / 32768
-		
+
 		if v1 == 0:
 			return 0
 		pressure = ((1048576 - adc_P) - (v2 / 4096)) * 3125
@@ -101,7 +98,7 @@ class BME280:
 			pressure = (pressure / v1) * 2
 		v1 = (self.digP[8] * (((pressure / 8.0) * (pressure / 8.0)) / 8192.0)) / 4096
 		v2 = ((pressure / 4.0) * self.digP[7]) / 8192.0
-		pressure = pressure + ((v1 + v2 + self.digP[6]) / 16.0)  
+		pressure = pressure + ((v1 + v2 + self.digP[6]) / 16.0)
 		pressure = pressure/100
 
 		self.result_P = float("{:7.2f}".format(pressure))
@@ -132,7 +129,7 @@ class BME280:
 			var_h = 100.0
 		elif var_h < 0.0:
 			var_h = 0.0
-		
+
 		self.result_H = float("{:6.2f}".format(var_h))
 
 		print("hum : %6.2f ％" % (var_h))
@@ -154,42 +151,17 @@ class BME280:
 		self.writeReg(0xF2,ctrl_hum_reg)
 		self.writeReg(0xF4,ctrl_meas_reg)
 		self.writeReg(0xF5,config_reg)
-	
+
 	def result(self) -> (float, float, float):
 		# print(self.result_T) # e.g. 27.9
 		# print(self.result_P) # e.g. 997.31
 		# print(self.result_H) # e.g. 57.1
 		return self.result_T, self.result_P, self.result_H
 
-class Repository:
-	def __init__(self, dsn) -> None:
-		self.conn = sqlite3.connect(dsn)
-
-	def store(self, temperature, pressure, humidity):
-		cur = self.conn.cursor()
-		date = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-		cur.execute('insert into environment(date, temperature, pressure, humidity) values(?, ?, ?, ?)', (date, temperature, pressure, humidity))
-		self.conn.commit()
-
-	def close(self):
-		self.conn.close()
-
-
 if __name__ == '__main__':
 	try:
 		bme280 = BME280()
 		bme280.get_calib_param()
 		bme280.readData()
-		t, p, h = bme280.result()
-
-		dsn = '/home/pi/github.com/ddddddO/sensor-pi/environment.sqlite3'
-		repo = Repository(dsn)
-		repo.store(t, p, h)
-		repo.close()
 	except KeyboardInterrupt:
 		pass
-
-
-
-
-

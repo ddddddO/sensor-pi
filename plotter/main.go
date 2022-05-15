@@ -15,26 +15,19 @@ import (
 	"gonum.org/v1/plot/vg/draw"
 )
 
-var dir = "/home/pi/github.com/ddddddO/sensor-pi/" // raspberry pi
-// var dir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/environment.sqlite3" // wsl
+// const baseDir = "/home/pi/github.com/ddddddO/sensor-pi/" // raspberry pi
+const baseDir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/" // wsl
+const plotterDir = "plotter"
 
-// FIXME: 日時の取り扱い
 // ref: https://github.com/gonum/plot/wiki/Example-plots#more-detailed-style-settings
 func main() {
-	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
-	}
-	// TODO: 使い方あってないよね？
-	plot.UTCUnixTime = plot.UnixTimeIn(loc)
-
 	p := plot.New()
 
 	p.Title.Text = "pressure @around tama river"
 	p.Y.Label.Text = "pressure"
 	p.X.Label.Text = "date"
 	p.X.Tick.Marker = plot.TimeTicks{Format: "2006-01-02\n15:04"}
+
 	p.Add(plotter.NewGrid())
 
 	data, err := fetchData()
@@ -61,7 +54,8 @@ func main() {
 	p.Add(lpLine, lpPoints)
 	// p.Legend.Add("line points", lpLine, lpPoints)
 
-	if err := p.Save(4*vg.Inch, 4*vg.Inch, filepath.Join(dir, "plotter", "pressure.png")); err != nil {
+	var imageName = "pressure.png"
+	if err := p.Save(4*vg.Inch, 4*vg.Inch, filepath.Join(baseDir, plotterDir, imageName)); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
@@ -73,7 +67,7 @@ type datum struct {
 }
 
 func fetchData() ([]datum, error) {
-	var dsn = filepath.Join(dir, "environment.sqlite3")
+	var dsn = filepath.Join(baseDir, "environment.sqlite3")
 	db, err := sql.Open("sqlite3", dsn)
 	if err != nil {
 		return nil, err
@@ -88,10 +82,6 @@ func fetchData() ([]datum, error) {
 	defer rows.Close()
 
 	const layout = "2006-01-02 15:04:05"
-	loc, err := time.LoadLocation("Asia/Tokyo")
-	if err != nil {
-		return nil, err
-	}
 	data := []datum{}
 	for rows.Next() {
 		var (
@@ -102,12 +92,11 @@ func fetchData() ([]datum, error) {
 			return nil, err
 		}
 
-		// NOTE: 一先ず気圧だけ
-		tm, err := time.ParseInLocation(layout, d, loc)
+		tm, err := time.Parse(layout, d)
 		if err != nil {
 			return nil, err
 		}
-		datum := datum{t: tm, value: p}
+		datum := datum{t: tm, value: p} // NOTE: 一先ず気圧だけ
 		data = append(data, datum)
 	}
 	if err := rows.Err(); err != nil {
