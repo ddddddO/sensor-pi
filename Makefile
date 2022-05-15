@@ -9,20 +9,9 @@ i2c:
 bme280:
 	sudo ./bme280.py
 
-# MEMO:
-# crontab -e
-# 0 9,18 * * * sudo /home/pi/github.com/ddddddO/sensor-pi/bme280_store.py > /tmp/bme_result && plotter && cat /tmp/bme_result | /home/pi/github.com/ddddddO/sensor-pi/tweet.py
-tweet:
-	sudo ./bme280_store.py > /tmp/bme_result && plotter && cat /tmp/bme_result | ./tweet.py
-
 # sudo pip3 install mh_z19
 mhz19:
 	sudo python3 -m mh_z19
 
 run:
 	sudo go run *.go
-
-# Create database: sqlite3 environment.sqlite3
-# Create table: execute schema.sql TODO: using migration tool
-conn:
-	sqlite3 environment.sqlite3

@@ -24,7 +24,7 @@ if __name__ == '__main__':
 		bme280.readData()
 		t, p, h = bme280.result()
 
-		dsn = '/home/pi/github.com/ddddddO/sensor-pi/environment.sqlite3'
+		dsn = '/home/pi/github.com/ddddddO/sensor-pi/env-bot/environment.sqlite3'
 		repo = Repository(dsn)
 		repo.store(t, p, h)
 		repo.close()

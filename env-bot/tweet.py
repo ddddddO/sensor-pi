@@ -15,6 +15,6 @@ pressure = input()
 hum = input()
 content = title + location + '\n' + temp + '\n' + pressure + '\n' + hum
 
-image_path = '/home/pi/github.com/ddddddO/sensor-pi/plotter/pressure.png'
+image_path = '/home/pi/github.com/ddddddO/sensor-pi/env-bot/plotter/pressure.png'
 
 api.update_status_with_media(status=content, filename=image_path)
