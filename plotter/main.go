@@ -62,8 +62,8 @@ func (pt *Plot) Save(points plotter.XYs) error {
 	return nil
 }
 
-// const baseDir = "/home/pi/github.com/ddddddO/sensor-pi/" // raspberry pi
-const baseDir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/" // wsl
+const baseDir = "/home/pi/github.com/ddddddO/sensor-pi/" // raspberry pi
+// const baseDir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/" // wsl
 const plotterDir = "plotter"
 
 // ref: https://github.com/gonum/plot/wiki/Example-plots#more-detailed-style-settings
@@ -106,8 +106,9 @@ func fetchData() (*environment, error) {
 	}
 	defer db.Close()
 
-	const query = "select date, temperature, pressure, humidity from environment order by date desc limit 10"
-	rows, err := db.Query(query)
+	const limit = 10
+	const query = "select date, temperature, pressure, humidity from environment order by date desc limit ?"
+	rows, err := db.Query(query, limit)
 	if err != nil {
 		return nil, err
 	}
