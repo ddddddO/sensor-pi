@@ -11,9 +11,9 @@ bme280:
 
 # MEMO:
 # crontab -e
-# 0 9,18 * * * sudo /home/pi/github.com/ddddddO/sensor-pi/bme280.py > /tmp/bme_result && plotter && cat /tmp/bme_result | /home/pi/github.com/ddddddO/sensor-pi/tweet.py
+# 0 9,18 * * * sudo /home/pi/github.com/ddddddO/sensor-pi/bme280_store.py > /tmp/bme_result && plotter && cat /tmp/bme_result | /home/pi/github.com/ddddddO/sensor-pi/tweet.py
 tweet:
-	sudo ./bme280.py > /tmp/bme_result && plotter && cat /tmp/bme_result | ./tweet.py
+	sudo ./bme280_store.py > /tmp/bme_result && plotter && cat /tmp/bme_result | ./tweet.py
 
 # sudo pip3 install mh_z19
 mhz19:

@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 from bme280 import BME280
 import datetime
 import sqlite3
