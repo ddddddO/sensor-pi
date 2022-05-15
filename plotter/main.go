@@ -30,13 +30,13 @@ func main() {
 
 	p.Add(plotter.NewGrid())
 
-	data, err := fetchData()
+	environment, err := fetchData()
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
 	}
 
-	points, err := points(data)
+	points, err := points(environment.pressure)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
@@ -61,12 +61,18 @@ func main() {
 	}
 }
 
+type environment struct {
+	pressure    []datum
+	temperature []datum
+	humidity    []datum
+}
+
 type datum struct {
 	t     time.Time
 	value float64
 }
 
-func fetchData() ([]datum, error) {
+func fetchData() (*environment, error) {
 	var dsn = filepath.Join(baseDir, "environment.sqlite3")
 	db, err := sql.Open("sqlite3", dsn)
 	if err != nil {
@@ -82,7 +88,11 @@ func fetchData() ([]datum, error) {
 	defer rows.Close()
 
 	const layout = "2006-01-02 15:04:05"
-	data := []datum{}
+	var (
+		dataP = []datum{} // for pressure
+		dataT = []datum{} // for temperature
+		dataH = []datum{} // for humidity
+	)
 	for rows.Next() {
 		var (
 			d       string
@@ -96,14 +106,21 @@ func fetchData() ([]datum, error) {
 		if err != nil {
 			return nil, err
 		}
-		datum := datum{t: tm, value: p} // NOTE: 一先ず気圧だけ
-		data = append(data, datum)
+
+		dataP = append(dataP, datum{t: tm, value: p})
+		dataT = append(dataT, datum{t: tm, value: t})
+		dataH = append(dataH, datum{t: tm, value: h})
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
-	return data, nil
+	e := &environment{
+		pressure:    dataP,
+		temperature: dataT,
+		humidity:    dataH,
+	}
+	return e, nil
 }
 
 func points(data []datum) (plotter.XYs, error) {
