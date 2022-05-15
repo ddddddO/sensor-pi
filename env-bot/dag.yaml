@@ -12,7 +12,7 @@ steps:
     description: "tweet env data and graph file"
     command: "/home/pi/github.com/ddddddO/sensor-pi/env-bot/tweet.py"
     depends:
-      - "sensor"
+      - "plot"
   - name: "finish"
     command: "echo finish"
     depends:
