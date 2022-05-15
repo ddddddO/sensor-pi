@@ -1,0 +1,20 @@
+name: "env-bot"
+steps:
+  - name: "sensor"
+    description: "get and store data from bme280"
+    command: "/home/pi/github.com/ddddddO/sensor-pi/env-bot/bme280_store.py"
+  - name: "plot"
+    description: "generate line graph file"
+    command: "plotter"
+    depends:
+      - "sensor"
+  - name: "tweet"
+    description: "tweet env data and graph file"
+    command: "/home/pi/github.com/ddddddO/sensor-pi/env-bot/tweet.py"
+    depends:
+      - "sensor"
+  - name: "finish"
+    command: "echo finish"
+    depends:
+      - "plot"
+      - "tweet"
