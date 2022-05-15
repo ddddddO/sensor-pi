@@ -13,7 +13,7 @@ location = '@多摩川付近'
 temp = lines[0]
 pressure = lines[1]
 hum = lines[2]
-content = title + location + '\n' + temp + '\n' + pressure + '\n' + hum
+content = title + location + '\n' + temp + pressure + hum
 
 auth = tweepy.OAuthHandler(settings.consumer_key, settings.consumer_secret)
 auth.set_access_token(settings.token, settings.token_secret)
