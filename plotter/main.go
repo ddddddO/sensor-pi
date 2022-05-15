@@ -13,6 +13,8 @@ import (
 	"gonum.org/v1/plot/plotter"
 	"gonum.org/v1/plot/vg"
 	"gonum.org/v1/plot/vg/draw"
+
+	sq "github.com/Masterminds/squirrel"
 )
 
 type Plot struct {
@@ -107,8 +109,16 @@ func fetchData() (*environment, error) {
 	defer db.Close()
 
 	const limit = 10
-	const query = "select date, temperature, pressure, humidity from environment order by date desc limit ?"
-	rows, err := db.Query(query, limit)
+	query := sq.Select("date", "temperature", "pressure", "humidity").
+		From("environment").
+		OrderBy("date desc").
+		Limit(limit)
+	sql, args, err := query.ToSql()
+	if err != nil {
+		return nil, err
+	}
+
+	rows, err := db.Query(sql, args...)
 	if err != nil {
 		return nil, err
 	}
