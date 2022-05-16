@@ -28,7 +28,7 @@ if __name__ == '__main__':
 	try:
 		bme280 = BME280()
 		bme280.get_calib_param()
-		bme280.readData()
+		bme280.read_data()
 		t, p, h = bme280.result()
 
 		dsn = '/home/pi/github.com/ddddddO/sensor-pi/env-bot/environment.sqlite3'

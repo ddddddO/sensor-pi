@@ -20,7 +20,7 @@ class BME280:
 
 		self.setup()
 
-	def writeReg(self, reg_address, data):
+	def write_reg(self, reg_address, data):
 		self.bus.write_byte_data(self.i2c_address,reg_address,data)
 
 	def get_calib_param(self):
@@ -63,7 +63,7 @@ class BME280:
 			if self.digH[i] & 0x8000:
 				self.digH[i] = (-self.digH[i] ^ 0xFFFF) + 1
 
-	def readData(self):
+	def read_data(self):
 		data = []
 		for i in range (0xF7, 0xF7+8):
 			data.append(self.bus.read_byte_data(self.i2c_address,i))
@@ -100,8 +100,6 @@ class BME280:
 
 		self.result_P = float("{:7.2f}".format(pressure))
 
-		print("pressure : %7.2f hPa" % (pressure))
-
 	def compensate_T(self, adc_T):
 		global t_fine
 		v1 = (adc_T / 16384.0 - self.digT[0] / 1024.0) * self.digT[1]
@@ -110,9 +108,6 @@ class BME280:
 		temperature = t_fine / 5120.0
 
 		self.result_T = float("{:-6.2f}".format(temperature))
-
-		result = "temp : {:-6.2f} ℃".format(temperature)
-		print(result)
 
 	def compensate_H(self, adc_H):
 		global t_fine
@@ -129,9 +124,6 @@ class BME280:
 
 		self.result_H = float("{:6.2f}".format(var_h))
 
-		print("hum : %6.2f ％" % (var_h))
-
-
 	def setup(self):
 		osrs_t = 1			#Temperature oversampling x 1
 		osrs_p = 1			#Pressure oversampling x 1
@@ -145,9 +137,9 @@ class BME280:
 		config_reg    = (t_sb << 5) | (filter << 2) | spi3w_en
 		ctrl_hum_reg  = osrs_h
 
-		self.writeReg(0xF2,ctrl_hum_reg)
-		self.writeReg(0xF4,ctrl_meas_reg)
-		self.writeReg(0xF5,config_reg)
+		self.write_reg(0xF2,ctrl_hum_reg)
+		self.write_reg(0xF4,ctrl_meas_reg)
+		self.write_reg(0xF5,config_reg)
 
 	def result(self) -> (float, float, float):
 		# print(self.result_T) # e.g. 27.9
