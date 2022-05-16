@@ -13,10 +13,8 @@ twitter_api -> twitter_app
 package "Raspberry Pi 4" as pi {
   database "SQLite" as db
   node "get and store data\n(Python)" as batch1
-  file "/tmp/bme_result" as file_tmp
   bme280 -> batch1: "temp/pressure/hum\n(am 9:00/pm 6:00)"
-  batch1 --> db
-  batch1 --> file_tmp
+  batch1 --> db: "latest data"
 
   node "generate line graph file\n(Go)" as batch2
   db --> batch2: "10 records"
@@ -24,7 +22,7 @@ package "Raspberry Pi 4" as pi {
   batch2 -> file_graph
 
   node "post tweet\n(Python)" as batch3
-  file_tmp --> batch3
+  db --> batch3: "latest record"
   file_graph -> batch3
   batch3 --> twitter_api: "temp/pressure/hum\n&\ngraph file"
 }
