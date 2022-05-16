@@ -1,6 +1,3 @@
-#!/usr/bin/env python3
-#coding: utf-8
-
 # copied from https://github.com/SWITCHSCIENCE/samplecodes/blob/master/BME280/Python27/bme280_sample.py
 from smbus2 import SMBus
 
@@ -157,11 +154,3 @@ class BME280:
 		# print(self.result_P) # e.g. 997.31
 		# print(self.result_H) # e.g. 57.1
 		return self.result_T, self.result_P, self.result_H
-
-if __name__ == '__main__':
-	try:
-		bme280 = BME280()
-		bme280.get_calib_param()
-		bme280.readData()
-	except KeyboardInterrupt:
-		pass
