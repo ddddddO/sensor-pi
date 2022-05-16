@@ -2,17 +2,27 @@
 
 import settings
 import tweepy
+import sqlite3
+from pypika import Query, Table, Order
 
-path = '/tmp/bme_result'
-f = open(path, 'r')
-lines = f.readlines()
-f.close()
+dsn = '/home/pi/github.com/ddddddO/sensor-pi/env-bot/environment.sqlite3'
+conn = sqlite3.connect(dsn)
+environment = Table('environment')
+q = Query.from_(environment)\
+    .select(environment.temperature, environment.pressure, environment.humidity)\
+    .orderby(environment.date, order=Order.desc)\
+    .limit(1)
+
+cur = conn.cursor()
+cur.execute(str(q))
+row = cur.fetchone()
+conn.close()
 
 title = 'ただいまの気温・気圧・湿度(屋内)'
 location = '@多摩川付近'
-temp = lines[0]
-pressure = lines[1]
-hum = lines[2]
+temp = "temp : {:-6.2f} ℃\n".format(row[0])
+pressure = "pressure : %7.2f hPa\n" % (row[1])
+hum = "hum : %6.2f ％" % (row[2])
 content = title + location + '\n' + temp + pressure + hum
 
 auth = tweepy.OAuthHandler(settings.consumer_key, settings.consumer_secret)
