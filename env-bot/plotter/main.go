@@ -17,8 +17,8 @@ import (
 	sq "github.com/Masterminds/squirrel"
 )
 
-// const baseDir = "/home/pi/github.com/ddddddO/sensor-pi/env-bot/" // raspberry pi
-const baseDir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/env-bot/" // wsl
+const baseDir = "/home/pi/github.com/ddddddO/sensor-pi/env-bot/" // raspberry pi
+// const baseDir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/env-bot/" // wsl
 const plotterDir = "plotter"
 
 // ref: https://github.com/gonum/plot/wiki/Example-plots#more-detailed-style-settings
