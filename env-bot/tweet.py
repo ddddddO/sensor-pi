@@ -20,10 +20,10 @@ conn.close()
 
 title = 'ただいまの気温・気圧・湿度(屋内)'
 location = '@多摩川付近'
-temp = "temp : {:-6.2f} ℃\n".format(row[0])
-pressure = "pressure : %7.2f hPa\n" % (row[1])
+temp = "temp : {:-6.2f} ℃".format(row[0])
+pressure = "pressure : %7.2f hPa" % (row[1])
 hum = "hum : %6.2f ％" % (row[2])
-content = title + location + '\n' + temp + pressure + hum
+content = title + location + '\n' + temp + '\n' + pressure + '\n' + hum
 
 auth = tweepy.OAuthHandler(settings.consumer_key, settings.consumer_secret)
 auth.set_access_token(settings.token, settings.token_secret)
