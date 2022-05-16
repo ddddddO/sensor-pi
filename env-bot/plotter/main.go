@@ -17,29 +17,38 @@ import (
 	sq "github.com/Masterminds/squirrel"
 )
 
-const baseDir = "/home/pi/github.com/ddddddO/sensor-pi/env-bot/" // raspberry pi
-// const baseDir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/env-bot/" // wsl
+// const baseDir = "/home/pi/github.com/ddddddO/sensor-pi/env-bot/" // raspberry pi
+const baseDir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/env-bot/" // wsl
 const plotterDir = "plotter"
 
 // ref: https://github.com/gonum/plot/wiki/Example-plots#more-detailed-style-settings
 func main() {
-	environment, err := fetchData()
-	if err != nil {
+	if err := run(); err != nil {
 		fmt.Fprintln(os.Stderr, err)
 		os.Exit(1)
+	}
+}
+
+func run() error {
+	environment, err := fetchData()
+	if err != nil {
+		return err
 	}
 
 	points, err := points(environment.pressure)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+		return err
 	}
 
 	pressurePlot := newPressurePlot()
-	if err := pressurePlot.Save(points); err != nil {
-		fmt.Fprintln(os.Stderr, err)
-		os.Exit(1)
+	if err := pressurePlot.build(points); err != nil {
+		return err
 	}
+	if err := pressurePlot.save(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 type environment struct {
@@ -134,7 +143,6 @@ func newPressurePlot() *Plot {
 	p.Y.Label.Text = "pressure"
 	p.X.Label.Text = "date"
 	p.X.Tick.Marker = plot.TimeTicks{Format: "2006-01-02\n15:04"}
-	p.Add(plotter.NewGrid())
 
 	return &Plot{
 		Plot:        p,
@@ -148,7 +156,8 @@ func newPressurePlot() *Plot {
 // func newTemperaturePlot() *Plot { return &Plot{} }
 // func newHumidityPlot() *Plot    { return &Plot{} }
 
-func (p *Plot) Save(points plotter.XYs) error {
+func (p *Plot) build(points plotter.XYs) error {
+	p.Add(plotter.NewGrid())
 	lpLine, lpPoints, err := plotter.NewLinePoints(points)
 	if err != nil {
 		return err
@@ -159,5 +168,9 @@ func (p *Plot) Save(points plotter.XYs) error {
 	p.Add(lpLine, lpPoints)
 	// p.Legend.Add("line points", lpLine, lpPoints)
 
-	return p.Plot.Save(4*vg.Inch, 4*vg.Inch, p.imagePath)
+	return nil
+}
+
+func (p *Plot) save() error {
+	return p.Save(4*vg.Inch, 4*vg.Inch, p.imagePath)
 }
