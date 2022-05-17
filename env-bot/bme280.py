@@ -1,6 +1,9 @@
-# copied from https://github.com/SWITCHSCIENCE/samplecodes/blob/master/BME280/Python27/bme280_sample.py
-from smbus2 import SMBus
+#!/usr/bin/env python3
 
+from smbus2 import SMBus
+from bme280_repository import Repository
+
+# copied from https://github.com/SWITCHSCIENCE/samplecodes/blob/master/BME280/Python27/bme280_sample.py
 class BME280:
 	def __init__(self):
 		self.bus_number  = 1
@@ -146,3 +149,19 @@ class BME280:
 		# print(self.result_P) # e.g. 997.31
 		# print(self.result_H) # e.g. 57.1
 		return self.result_T, self.result_P, self.result_H
+
+if __name__ == '__main__':
+	try:
+		bme280 = BME280()
+		bme280.get_calib_param()
+		bme280.read_data()
+		t, p, h = bme280.result()
+
+		dsn = '/home/pi/github.com/ddddddO/sensor-pi/env-bot/environment.sqlite3'
+		repo = Repository(dsn)
+		repo.store(t, p, h)
+	except Exception as err:
+		# TODO: error handling
+		print('Exception!: {err}'.format(err=err))
+	finally:
+		repo.close()
