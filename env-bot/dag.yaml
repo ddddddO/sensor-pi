@@ -16,5 +16,4 @@ steps:
   - name: "finish"
     command: "echo finish"
     depends:
-      - "plot"
       - "tweet"

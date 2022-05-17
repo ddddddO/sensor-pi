@@ -2,32 +2,29 @@
 
 import settings
 import tweepy
-import sqlite3
-from pypika import Query, Table, Order
+from bme280_repository import Repository
 
-dsn = '/home/pi/github.com/ddddddO/sensor-pi/env-bot/environment.sqlite3'
-conn = sqlite3.connect(dsn)
-environment = Table('environment')
-q = Query.from_(environment)\
-    .select(environment.temperature, environment.pressure, environment.humidity)\
-    .orderby(environment.date, order=Order.desc)\
-    .limit(1)
+if __name__ == '__main__':
+	try:
+		dsn = '/home/pi/github.com/ddddddO/sensor-pi/env-bot/environment.sqlite3'
+		repo = Repository(dsn)
+		t, p, h = repo.fetch()
 
-cur = conn.cursor()
-cur.execute(str(q))
-row = cur.fetchone()
-conn.close()
+		title = 'ただいまの気温・気圧・湿度(屋内)'
+		location = '@多摩川付近'
+		temp = "temp : {:-6.2f} ℃".format(t)
+		pressure = "pressure : %7.2f hPa" % (p)
+		hum = "hum : %6.2f ％" % (h)
+		content = title + location + '\n' + temp + '\n' + pressure + '\n' + hum
 
-title = 'ただいまの気温・気圧・湿度(屋内)'
-location = '@多摩川付近'
-temp = "temp : {:-6.2f} ℃".format(row[0])
-pressure = "pressure : %7.2f hPa" % (row[1])
-hum = "hum : %6.2f ％" % (row[2])
-content = title + location + '\n' + temp + '\n' + pressure + '\n' + hum
+		auth = tweepy.OAuthHandler(settings.consumer_key, settings.consumer_secret)
+		auth.set_access_token(settings.token, settings.token_secret)
+		api = tweepy.API(auth)
 
-auth = tweepy.OAuthHandler(settings.consumer_key, settings.consumer_secret)
-auth.set_access_token(settings.token, settings.token_secret)
-api = tweepy.API(auth)
-
-image_path = '/home/pi/github.com/ddddddO/sensor-pi/env-bot/plotter/pressure.png'
-api.update_status_with_media(status=content, filename=image_path)
+		image_path = '/home/pi/github.com/ddddddO/sensor-pi/env-bot/plotter/pressure.png'
+		api.update_status_with_media(status=content, filename=image_path)
+	except Exception as err:
+		# TODO: error handling
+		print('Exception!: {err}'.format(err=err))
+	finally:
+		repo.close()
