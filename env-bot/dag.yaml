@@ -1,4 +1,7 @@
 name: "env-bot"
+env:
+  DSN: "/home/pi/github.com/ddddddO/sensor-pi/env-bot/environment.sqlite3"
+  PRESSURE_IMAGE_PATH: "/tmp/pressure.png"
 steps:
   - name: "sensor"
     description: "get and store data from bme280"

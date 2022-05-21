@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"image/color"
 	"os"
-	"path/filepath"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -16,10 +15,6 @@ import (
 
 	sq "github.com/Masterminds/squirrel"
 )
-
-const baseDir = "/home/pi/github.com/ddddddO/sensor-pi/env-bot/" // raspberry pi
-// const baseDir = "/mnt/c/DEV/workspace/GO/src/github.com/ddddddO/sensor-pi/env-bot/" // wsl
-const plotterDir = "plotter"
 
 // ref: https://github.com/gonum/plot/wiki/Example-plots#more-detailed-style-settings
 func main() {
@@ -63,7 +58,7 @@ type datum struct {
 }
 
 func fetchData() (*environment, error) {
-	var dsn = filepath.Join(baseDir, "environment.sqlite3")
+	var dsn = os.Getenv("DSN")
 	db, err := sql.Open("sqlite3", dsn)
 	if err != nil {
 		return nil, err
@@ -146,7 +141,7 @@ func newPressurePlot() *Plot {
 
 	return &Plot{
 		Plot:        p,
-		imagePath:   filepath.Join(baseDir, plotterDir, "pressure.png"),
+		imagePath:   os.Getenv("PRESSURE_IMAGE_PATH"),
 		lineColor:   color.RGBA{G: 255, A: 255},
 		pointsColor: color.RGBA{R: 255, A: 255},
 	}
