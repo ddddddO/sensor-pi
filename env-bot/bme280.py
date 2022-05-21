@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 from smbus2 import SMBus
 from bme280_repository import Repository
 
@@ -157,7 +158,7 @@ if __name__ == '__main__':
 		bme280.read_data()
 		t, p, h = bme280.result()
 
-		dsn = '/home/pi/github.com/ddddddO/sensor-pi/env-bot/environment.sqlite3'
+		dsn = os.getenv('DSN')
 		repo = Repository(dsn)
 		repo.store(t, p, h)
 	except Exception as err:
