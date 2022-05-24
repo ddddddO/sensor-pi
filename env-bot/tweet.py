@@ -11,8 +11,8 @@ if __name__ == '__main__':
 		repo = Repository(dsn)
 		t, p, h = repo.fetch()
 
-		title = 'ただいまの気温・気圧・湿度(屋内)'
-		location = '@多摩川付近'
+		title = 'ただいまの気温・気圧・湿度'
+		location = '@多摩川付近(屋内)'
 		temp = "temp : {:-6.2f} ℃".format(t)
 		pressure = "pressure : %7.2f hPa" % (p)
 		hum = "hum : %6.2f ％" % (h)
