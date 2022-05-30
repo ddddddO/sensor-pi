@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"image/color"
 	"os"
@@ -14,6 +13,7 @@ import (
 	"gonum.org/v1/plot/vg/draw"
 
 	sq "github.com/Masterminds/squirrel"
+	"github.com/jmoiron/sqlx"
 )
 
 // ref: https://github.com/gonum/plot/wiki/Example-plots#more-detailed-style-settings
@@ -57,9 +57,16 @@ type datum struct {
 	value float64
 }
 
+type env struct {
+	D string  `db:"date"`
+	T float64 `db:"temperature"`
+	P float64 `db:"pressure"`
+	H float64 `db:"humidity"`
+}
+
 func fetchData() (*environment, error) {
 	var dsn = os.Getenv("DSN")
-	db, err := sql.Open("sqlite3", dsn)
+	db, err := sqlx.Connect("sqlite3", dsn)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +82,7 @@ func fetchData() (*environment, error) {
 		return nil, err
 	}
 
-	rows, err := db.Query(sql, args...)
+	rows, err := db.Queryx(sql, args...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,22 +95,18 @@ func fetchData() (*environment, error) {
 		dataH = []datum{} // for humidity
 	)
 	for rows.Next() {
-		var (
-			d       string
-			t, p, h float64
-		)
-		if err := rows.Scan(&d, &t, &p, &h); err != nil {
+		e := &env{}
+		if err := rows.StructScan(e); err != nil {
 			return nil, err
 		}
-
-		tm, err := time.Parse(layout, d)
+		tm, err := time.Parse(layout, e.D)
 		if err != nil {
 			return nil, err
 		}
 
-		dataP = append(dataP, datum{t: tm, value: p})
-		dataT = append(dataT, datum{t: tm, value: t})
-		dataH = append(dataH, datum{t: tm, value: h})
+		dataP = append(dataP, datum{t: tm, value: e.P})
+		dataT = append(dataT, datum{t: tm, value: e.T})
+		dataH = append(dataH, datum{t: tm, value: e.H})
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
