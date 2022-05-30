@@ -13,9 +13,9 @@ if __name__ == '__main__':
 
 		title = 'ただいまの気温・気圧・湿度'
 		location = '@多摩川付近(屋内)'
-		temp = "temp : {:-6.2f} ℃".format(t)
+		temp = "temperature : {:-6.2f} ℃".format(t)
 		pressure = "pressure : %7.2f hPa" % (p)
-		hum = "hum : %6.2f ％" % (h)
+		hum = "humidity : %6.2f ％" % (h)
 		content = title + location + '\n' + temp + '\n' + pressure + '\n' + hum
 
 		auth = tweepy.OAuthHandler(settings.consumer_key, settings.consumer_secret)
