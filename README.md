@@ -2,9 +2,8 @@
 
 - Raspberry Pi 4とsensor類をつなげてみる
 
----
 
-## [env-bot](env-bot/)
+# [env-bot](env-bot/)
 ### 概要
 - bme280(センサ)から気圧・温度・湿度を取得する@多摩川あたり。
 - 取得したデータを使って線グラフを生成する。
@@ -22,9 +21,8 @@
 ### ツイート
 ![](env-bot/doc/tweet.png)
 
----
 
-## 扱うsensor
+# 扱うsensor
 ![](image/sensor.jpg)
 
 ### LaDicha MH-Z19 0-5000PPM CO2室内空気質モニタ用赤外線CO2センサUART / PWM
@@ -46,9 +44,8 @@
   - リンク先の配線で動作確認済み
   - ![](image/bme280_haisen.jpg)
 
----
 
-## links
+# Links
 - 「エキスパートたちのGo言語」の「Raspberry PiによるCO2、温湿度、気圧のモニタリング」p219~ をやっていく。
   - https://github.com/nozo-moto/mhz19-bme280-go
 - http://www.dododo.site/posts/raspberry-pi-4%E3%82%92lab%E3%81%AB%E3%81%99%E3%82%8B/
