@@ -30,16 +30,39 @@ func run() error {
 		return err
 	}
 
-	points, err := points(environment.pressure)
+	pressurePoints, err := points(environment.pressure)
 	if err != nil {
 		return err
 	}
-
 	pressurePlot := newPressurePlot()
-	if err := pressurePlot.build(points); err != nil {
+	if err := pressurePlot.build(pressurePoints); err != nil {
 		return err
 	}
 	if err := pressurePlot.save(); err != nil {
+		return err
+	}
+
+	temperaturePoints, err := points(environment.temperature)
+	if err != nil {
+		return err
+	}
+	temperaturePlot := newTemperaturePlot()
+	if err := temperaturePlot.build(temperaturePoints); err != nil {
+		return err
+	}
+	if err := temperaturePlot.save(); err != nil {
+		return err
+	}
+
+	humidityPoints, err := points(environment.humidity)
+	if err != nil {
+		return err
+	}
+	humidityPlot := newHumidityPlot()
+	if err := humidityPlot.build(humidityPoints); err != nil {
+		return err
+	}
+	if err := humidityPlot.save(); err != nil {
 		return err
 	}
 
@@ -150,9 +173,35 @@ func newPressurePlot() *Plot {
 	}
 }
 
-// NOTE: 気温・湿度のグラフを生成する際に以下を編集する
-// func newTemperaturePlot() *Plot { return &Plot{} }
-// func newHumidityPlot() *Plot    { return &Plot{} }
+func newTemperaturePlot() *Plot {
+	p := plot.New()
+	p.Title.Text = "temperature @around tama river"
+	p.Y.Label.Text = "temperature"
+	p.X.Label.Text = "date"
+	p.X.Tick.Marker = plot.TimeTicks{Format: "2006-01-02\n15:04"}
+
+	return &Plot{
+		Plot:        p,
+		imagePath:   os.Getenv("TEMPERATURE_IMAGE_PATH"),
+		lineColor:   color.RGBA{R: 255, B: 255, A: 255},
+		pointsColor: color.RGBA{R: 255, A: 255},
+	}
+}
+
+func newHumidityPlot() *Plot {
+	p := plot.New()
+	p.Title.Text = "humidity @around tama river"
+	p.Y.Label.Text = "humidity"
+	p.X.Label.Text = "date"
+	p.X.Tick.Marker = plot.TimeTicks{Format: "2006-01-02\n15:04"}
+
+	return &Plot{
+		Plot:        p,
+		imagePath:   os.Getenv("HUMIDITY_IMAGE_PATH"),
+		lineColor:   color.RGBA{G: 255, B: 255, A: 255},
+		pointsColor: color.RGBA{R: 255, A: 255},
+	}
+}
 
 func (p *Plot) build(points plotter.XYs) error {
 	p.Add(plotter.NewGrid())
