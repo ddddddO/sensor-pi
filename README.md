@@ -2,7 +2,29 @@
 
 - Raspberry Pi 4とsensor類をつなげてみる
 
-## sensor
+---
+
+## [env-bot](env-bot/)
+### 概要
+- bme280(センサ)から気圧・温度・湿度を取得する@多摩川あたり。
+- 取得したデータを使って線グラフを生成する。
+- 線グラフと取得データを毎日am9:00/pm6:00にツイートする。
+
+### データフロー
+![](env-bot/doc/dataflow.svg)
+
+### 実行基盤
+- cronと[**Dagu**](https://github.com/yohamta/dagu)を利用。
+- 各実行コマンドの依存を[YAMLファイル](dag.yaml)に記載しDaguを実行する。
+- Daguにはserverサブコマンドがあり、依存関係を視覚的に確認もできる。
+  - ![](env-bot/doc/dagu.png)
+
+### ツイート
+![](env-bot/doc/tweet.png)
+
+---
+
+## 扱うsensor
 ![](image/sensor.jpg)
 
 ### LaDicha MH-Z19 0-5000PPM CO2室内空気質モニタ用赤外線CO2センサUART / PWM
@@ -24,6 +46,7 @@
   - リンク先の配線で動作確認済み
   - ![](image/bme280_haisen.jpg)
 
+---
 
 ## links
 - 「エキスパートたちのGo言語」の「Raspberry PiによるCO2、温湿度、気圧のモニタリング」p219~ をやっていく。
@@ -51,6 +74,3 @@
     - 各センサの仕様を確認しないと、そのセンサのアドレスや、どのレジスタ(のアドレス)からデータの読み書きをすればいいかわからない
       - [BME280のデータシート](https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME280-DS002.pdf)
         - [実装](https://github.com/nozo-moto/mhz19-bme280-go/blob/master/bme280/bme280.go)
-
-- [env-bot](env-bot/README.md)
-  - 過去10レコード分の線グラフと最新データの気圧温度湿度をツイートするシステム
