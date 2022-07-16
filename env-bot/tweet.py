@@ -23,7 +23,14 @@ if __name__ == '__main__':
 		api = tweepy.API(auth)
 
 		image_path = os.getenv('PRESSURE_IMAGE_PATH')
-		api.update_status_with_media(status=content, filename=image_path)
+		status = api.update_status_with_media(status=content, filename=image_path)
+
+		image_path = os.getenv('TEMPERATURE_IMAGE_PATH')
+		status = api.update_status_with_media(in_reply_to_status_id=status.id, status='', filename=image_path)
+
+		image_path = os.getenv('HUMIDITY_IMAGE_PATH')
+		status = api.update_status_with_media(in_reply_to_status_id=status.id, status='', filename=image_path)
+
 	except Exception as err:
 		# TODO: error handling
 		print('Exception!: {err}'.format(err=err))
