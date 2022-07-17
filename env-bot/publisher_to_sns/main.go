@@ -1,6 +1,8 @@
 package main
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 	"time"
@@ -23,7 +25,19 @@ func main() {
 
 	svc := sns.New(sess)
 
-	msg := `{"a":"AA", "b":"BB"}`
+	env, err := fetchData()
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	buf := &bytes.Buffer{}
+	if err := json.NewEncoder(buf).Encode(env); err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
+
+	msg := buf.String()
 	topicARN := "arn:aws:sns:ap-northeast-1:820544363308:dbdata_to_filegenerator"
 
 	result, err := svc.Publish(&sns.PublishInput{
@@ -39,14 +53,14 @@ func main() {
 }
 
 type environment struct {
-	pressure    []datum
-	temperature []datum
-	humidity    []datum
+	Pressure    []datum `json:"pressure"`
+	Temperature []datum `json:"temperature"`
+	Humidity    []datum `json:"humidity"`
 }
 
 type datum struct {
-	t     time.Time
-	value float64
+	T     time.Time `json:"date"`
+	Value float64   `json:"value"`
 }
 
 type env struct {
@@ -96,18 +110,18 @@ func fetchData() (*environment, error) {
 			return nil, err
 		}
 
-		dataP = append(dataP, datum{t: tm, value: e.P})
-		dataT = append(dataT, datum{t: tm, value: e.T})
-		dataH = append(dataH, datum{t: tm, value: e.H})
+		dataP = append(dataP, datum{T: tm, Value: e.P})
+		dataT = append(dataT, datum{T: tm, Value: e.T})
+		dataH = append(dataH, datum{T: tm, Value: e.H})
 	}
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
 
 	e := &environment{
-		pressure:    dataP,
-		temperature: dataT,
-		humidity:    dataH,
+		Pressure:    dataP,
+		Temperature: dataT,
+		Humidity:    dataH,
 	}
 	return e, nil
 }
