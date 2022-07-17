@@ -42,16 +42,6 @@ def receive_message() -> (str, str, float, str):
   latest_value = env['latest']['value']
   encoded = env['encoded']
 
-  # temperature = environment[1]
-  # type_t = temperature['type']
-  # latest_value_t = temperature['latest']['value']
-  # encoded_t = temperature['encoded']
-
-  # humidity = environment[2]
-  # type_h = humidity['type']
-  # latest_value_h = humidity['latest']['value']
-  # encoded_h = humidity['encoded']
-
   return receipt_handle, type, latest_value, encoded
 
 
