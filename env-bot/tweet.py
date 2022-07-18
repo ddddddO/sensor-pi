@@ -1,4 +1,4 @@
-#!/usr/bin/env python3.8
+#!/usr/local/bin/python3.8
 
 import base64
 import time
