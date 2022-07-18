@@ -18,9 +18,10 @@
 - Daguにはserverサブコマンドがあり、依存関係を視覚的に確認もできる。
   - ![](env-bot/doc/dagu.png)
 
-### ツイート
-![](env-bot/doc/tweet.png)
-
+### Tweet
+![](env-bot/doc/tweet_1.png)
+![](env-bot/doc/tweet_2.png)
+![](env-bot/doc/tweet_3.png)
 
 # 扱うsensor
 ![](image/sensor.jpg)
