@@ -10,9 +10,9 @@ from diagrams.saas.social import Twitter
 with Diagram("ENV-Tweet-Bot", show=False, outformat="png"):
   bme280 = Server("bme280\n(sensor)")
   
-  with Cluster("Raspberry pi"):
+  with Cluster("Raspberry Pi 4"):
     prog1 = Python("Get and Store\nsensor value")
-    db = SQL("sqlite3")
+    db = SQL("SQLite3")
     prog2 = Go("Fetch and Publish\nenv data\n(10 records)")
     prog3 = Python("Pull and Decode\nimage data\nand Post tweet")
 

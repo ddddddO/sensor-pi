@@ -12,12 +12,12 @@ with Diagram("Next ENV-Tweet-Bot", direction="TB", show=False, outformat="png"):
   mh_z19 = Server("mh-z19\n(sensor)")
   sensor_c = Server("sensor c")
   
-  with Cluster("Raspberry pi"):
+  with Cluster("Raspberry Pi 4"):
     prog_a = Python("Get and Publish\nsensor value")
     prog_b = Python("Get and Publish\nsensor value")
     prog_c = Python("Get and Publish\nsensor value")
     prog1 = Go("Pull and Store\nsensor data")
-    db = SQL("sqlite3")
+    db = SQL("SQLite3")
     prog2 = Go("Fetch and Publish\nenv data\n(10 records)")
     prog3 = Python("Pull and Decode\nimage data\nand Post tweet")
 
