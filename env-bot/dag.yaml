@@ -1,23 +1,27 @@
 name: "env-bot"
 env:
   DSN: "/home/pi/github.com/ddddddO/sensor-pi/env-bot/environment.sqlite3"
-  PRESSURE_IMAGE_PATH: "/tmp/pressure.png"
-  TEMPERATURE_IMAGE_PATH: "/tmp/temperature.png"
-  HUMIDITY_IMAGE_PATH: "/tmp/humidity.png"
+  AWS_SHARED_CREDENTIALS_FILE: "/home/pi/.aws/credentials"
+  AWS_CONFIG_FILE: "/home/pi/.aws/config"
 steps:
   - name: "sensor"
     description: "get and store data from bme280"
     command: "/home/pi/github.com/ddddddO/sensor-pi/env-bot/bme280.py"
-  - name: "plot"
-    description: "generate line graph file"
-    command: "plotter"
+  - name: "publisher_to_sns"
+    description: "environment data to AmazonSNS"
+    command: "/home/pi/github.com/ddddddO/sensor-pi/env-bot/publisher_to_sns/publisher_to_sns"
     depends:
       - "sensor"
+  - name: "wait"
+    description: "wait"
+    command: "sleep 60"
+    depends:
+      - "publisher_to_sns"
   - name: "tweet"
     description: "tweet env data and graph file"
     command: "/home/pi/github.com/ddddddO/sensor-pi/env-bot/tweet.py"
     depends:
-      - "plot"
+      - "wait"
   - name: "finish"
     command: "echo finish"
     depends:
