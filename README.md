@@ -12,6 +12,9 @@
 ### 構成
 ![](env-bot/doc/env-tweet-bot.png)
 
+- [Old Architecture](env-bot/doc/old_dataflow.svg)
+- [Next Architecture](env-bot/doc/next_env-tweet-bot.png)
+
 ### 実行基盤
 - cronと[**Dagu**](https://github.com/yohamta/dagu)を利用。
 - 各実行コマンドの依存を[YAMLファイル](dag.yaml)に記載しDaguを実行する。
