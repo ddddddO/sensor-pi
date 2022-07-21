@@ -1,4 +1,4 @@
-from diagrams import Cluster, Diagram
+from diagrams import Cluster, Diagram, Edge
 
 from diagrams.programming.language import Python, Go
 from diagrams.onprem.compute import Server
@@ -11,7 +11,11 @@ with Diagram("Next ENV-Tweet-Bot", direction="TB", show=False, outformat="png"):
   bme280 = Server("bme280\n(sensor)")
   mh_z19 = Server("mh-z19\n(sensor)")
   sensor_c = Server("sensor c")
-  
+
+  green_edge = Edge(color="darkgreen")
+  brown_edge = Edge(color="brown")
+  black_edge = Edge(color="black", style="bold")
+
   with Cluster("Raspberry Pi 4"):
     prog_a = Python("Get and Publish\nsensor value")
     prog_b = Python("Get and Publish\nsensor value")
@@ -23,22 +27,24 @@ with Diagram("Next ENV-Tweet-Bot", direction="TB", show=False, outformat="png"):
 
   with Cluster("AWS"):
     sqs0 = SQS("sensor values")
-    sns = SNS("pressure/\nhumidity/\ntemperature data")
+    sns = SNS("sensor values")
 
     with Cluster("Generate image"):
       svc_group = [Lambda("pressure"),
                   Lambda("humidity"),
-                  Lambda("temperature")]
+                  Lambda("temperature"),
+                  Lambda("co2"),
+                  Lambda("sencor c")]
 
     sqs1 = SQS("encoded base64\nimage data")
 
-  twitter = Twitter("twitter")
+  twitter = Twitter("Twitter")
 
-  mh_z19 >> prog_a >> sqs0
-  bme280 >> prog_b >> sqs0
-  sensor_c >> prog_c >> sqs0
-  sqs0 >> prog1
-  prog1 >> db >> prog2
-  prog2 >> sns >> svc_group
-  svc_group >> sqs1 >> prog3
-  prog3 >> twitter
+  mh_z19 >> black_edge >> prog_a >> green_edge >> sqs0
+  bme280 >> black_edge >> prog_b >> green_edge >> sqs0
+  sensor_c >> black_edge >> prog_c >> green_edge >> sqs0
+  sqs0 >> brown_edge >> prog1
+  prog1 >> black_edge >> db >> black_edge >> prog2
+  prog2 >> black_edge >> sns >> green_edge >> svc_group
+  svc_group >> green_edge >> sqs1 >> brown_edge >> prog3
+  prog3 >> black_edge >> twitter
