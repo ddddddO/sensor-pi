@@ -26,7 +26,7 @@ with Diagram("Next ENV-Tweet-Bot", direction="TB", show=False, outformat="png"):
     prog3 = Python("Pull and Decode\nimage data\nand Post tweet")
 
   sensor_d = Server("sensor d")
-  sensor_e = Server("sensor d")
+  sensor_e = Server("sensor e")
 
   with Cluster("Host x"):
     prog_d = Python("Get and Publish\nsensor value")
