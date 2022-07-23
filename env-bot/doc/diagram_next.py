@@ -25,6 +25,13 @@ with Diagram("Next ENV-Tweet-Bot", direction="TB", show=False, outformat="png"):
     prog2 = Go("Fetch and Publish\nenv data\n(10 records)")
     prog3 = Python("Pull and Decode\nimage data\nand Post tweet")
 
+  sensor_d = Server("sensor d")
+  sensor_e = Server("sensor d")
+
+  with Cluster("Host x"):
+    prog_d = Python("Get and Publish\nsensor value")
+    prog_e = Python("Get and Publish\nsensor value")
+
   with Cluster("AWS"):
     sqs0 = SQS("sensor values")
     sns = SNS("sensor values")
@@ -34,7 +41,9 @@ with Diagram("Next ENV-Tweet-Bot", direction="TB", show=False, outformat="png"):
                   Lambda("humidity"),
                   Lambda("temperature"),
                   Lambda("co2"),
-                  Lambda("sencor c")]
+                  Lambda("sencor c"),
+                  Lambda("sencor d"),
+                  Lambda("sencor e")]
 
     sqs1 = SQS("encoded base64\nimage data")
 
@@ -43,6 +52,10 @@ with Diagram("Next ENV-Tweet-Bot", direction="TB", show=False, outformat="png"):
   mh_z19 >> black_edge >> prog_a >> green_edge >> sqs0
   bme280 >> black_edge >> prog_b >> green_edge >> sqs0
   sensor_c >> black_edge >> prog_c >> green_edge >> sqs0
+
+  sensor_d >> black_edge >> prog_d >> green_edge >> sqs0
+  sensor_e >> black_edge >> prog_e >> green_edge >> sqs0
+
   sqs0 >> brown_edge >> prog1
   prog1 >> black_edge >> db >> black_edge >> prog2
   prog2 >> black_edge >> sns >> green_edge >> svc_group
