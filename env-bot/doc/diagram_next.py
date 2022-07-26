@@ -41,9 +41,9 @@ with Diagram("Next ENV-Tweet-Bot", direction="TB", show=False, outformat="png"):
                   Lambda("humidity"),
                   Lambda("temperature"),
                   Lambda("co2"),
-                  Lambda("sencor c"),
-                  Lambda("sencor d"),
-                  Lambda("sencor e")]
+                  Lambda("sensor c"),
+                  Lambda("sensor d"),
+                  Lambda("sensor e")]
 
     sqs1 = SQS("encoded base64\nimage data")
 
