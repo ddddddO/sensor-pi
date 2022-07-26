@@ -12,9 +12,9 @@
 ### 構成
 ![](env-bot/doc/env-tweet-bot.png)
 
-- [Old Architecture](env-bot/doc/README.md#old-architecture)
+- [Old Architecture](env-bot/doc/README_old_architecture.md#old-architecture)
   - [repository](https://github.com/ddddddO/sensor-pi/tree/f7eba6c14cdeaad8d3a23a1c6be6b905672c27de/env-bot)
-- [Next Architecture](env-bot/doc/README.md#next-architecture)
+- [Next Architecture](env-bot/doc/README_next_architecture.md#next-architecture)
 
 ### 実行基盤
 - cronと[**Dagu**](https://github.com/yohamta/dagu)を利用。
