@@ -77,4 +77,6 @@
       - [BME280のデータシート](https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME280-DS002.pdf)
         - [実装](https://github.com/nozo-moto/mhz19-bme280-go/blob/master/bme280/bme280.go)
 - mh-z19を利用可能にする
-  - https://rcmdnk.com/blog/2021/02/18/computer-iot-raspberrypi/
+  - ref: https://rcmdnk.com/blog/2021/02/18/computer-iot-raspberrypi/
+  - /boot/config.txtに以下を追記しrebootする
+    - `dtoverlay=disable-bt`
