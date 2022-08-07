@@ -76,3 +76,5 @@
     - 各センサの仕様を確認しないと、そのセンサのアドレスや、どのレジスタ(のアドレス)からデータの読み書きをすればいいかわからない
       - [BME280のデータシート](https://ae-bst.resource.bosch.com/media/_tech/media/datasheets/BST-BME280-DS002.pdf)
         - [実装](https://github.com/nozo-moto/mhz19-bme280-go/blob/master/bme280/bme280.go)
+- mh-z19を利用可能にする
+  - https://rcmdnk.com/blog/2021/02/18/computer-iot-raspberrypi/
