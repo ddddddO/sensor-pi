@@ -158,7 +158,7 @@ func newCO2Plot() *Plot {
 	return &Plot{
 		Plot:        p,
 		imagePath:   co2ImagePath,
-		lineColor:   color.RGBA{G: 255, B: 255, A: 255},
+		lineColor:   color.RGBA{R: 128, G: 128, B: 128, A: 1},
 		pointsColor: color.RGBA{R: 255, A: 255},
 	}
 }
