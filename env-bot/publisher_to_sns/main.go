@@ -1,8 +1,8 @@
 package main
 
 import (
-	// "bytes"
-	// "encoding/json"
+	"bytes"
+	"encoding/json"
 	"fmt"
 	"os"
 	"time"
@@ -10,51 +10,44 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 
 	sq "github.com/Masterminds/squirrel"
-	// "github.com/aws/aws-sdk-go/aws/session"
-	// "github.com/aws/aws-sdk-go/service/sns"
+	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/sns"
 	"github.com/jmoiron/sqlx"
 )
 
 // ref: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/sns-example-publish.html
 func main() {
-	// Initialize a session that the SDK will use to load
-	// credentials from the shared credentials file. (~/.aws/credentials).
-	// sess := session.Must(session.NewSessionWithOptions(session.Options{
-	// 	SharedConfigState: session.SharedConfigEnable,
-	// }))
-
-	// svc := sns.New(sess)
-
-	fmt.Println("aaa")
-
 	env, err := fetchData()
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	}
 
-	fmt.Printf("%+v", env)
-	/*
-		buf := &bytes.Buffer{}
-		if err := json.NewEncoder(buf).Encode(env); err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
+	buf := &bytes.Buffer{}
+	if err := json.NewEncoder(buf).Encode(env); err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
 
-		msg := buf.String()
-		topicARN := "arn:aws:sns:ap-northeast-1:820544363308:dbdata_to_filegenerator"
+	// Initialize a session that the SDK will use to load
+	// credentials from the shared credentials file. (~/.aws/credentials).
+	sess := session.Must(session.NewSessionWithOptions(session.Options{
+		SharedConfigState: session.SharedConfigEnable,
+	}))
+	svc := sns.New(sess)
+	msg := buf.String()
+	topicARN := "arn:aws:sns:ap-northeast-1:820544363308:dbdata_to_filegenerator"
 
-		result, err := svc.Publish(&sns.PublishInput{
-			Message:  &msg,
-			TopicArn: &topicARN,
-		})
-		if err != nil {
-			fmt.Println(err.Error())
-			os.Exit(1)
-		}
+	result, err := svc.Publish(&sns.PublishInput{
+		Message:  &msg,
+		TopicArn: &topicARN,
+	})
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	}
 
-		fmt.Println(*result.MessageId)
-	*/
+	fmt.Println(*result.MessageId)
 }
 
 type environment struct {
