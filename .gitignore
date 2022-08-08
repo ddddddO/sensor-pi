@@ -1,5 +1,6 @@
 settings.py
 __pycache__
 environment.sqlite3
+environment.sqlite3.bk
 out/
 tempp/
