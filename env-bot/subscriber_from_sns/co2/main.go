@@ -69,7 +69,7 @@ func test(ctx context.Context, snsEvent events.SNSEvent) {
 
 	ret := &ret{
 		Environment: []*retEnv{
-			&retEnv{Type: "humidity", Latest: env.Humidity[0], Encoded: encoded},
+			&retEnv{Type: "co2", Latest: env.CO2[0], Encoded: encoded},
 		},
 	}
 
@@ -114,15 +114,15 @@ func test(ctx context.Context, snsEvent events.SNSEvent) {
 }
 
 func generate(environment *environment) error {
-	humidityPoints, err := points(environment.Humidity)
+	co2Points, err := points(environment.CO2)
 	if err != nil {
 		return err
 	}
-	humidityPlot := newHumidityPlot()
-	if err := humidityPlot.build(humidityPoints); err != nil {
+	co2Plot := newCO2Plot()
+	if err := co2Plot.build(co2Points); err != nil {
 		return err
 	}
-	if err := humidityPlot.save(); err != nil {
+	if err := co2Plot.save(); err != nil {
 		return err
 	}
 
@@ -146,18 +146,18 @@ type Plot struct {
 
 const storeDir = "/tmp"
 
-var humidityImagePath = filepath.Join(storeDir, "humidity.png")
+var co2ImagePath = filepath.Join(storeDir, "co2.png")
 
-func newHumidityPlot() *Plot {
+func newCO2Plot() *Plot {
 	p := plot.New()
-	p.Title.Text = "humidity @around tama river"
-	p.Y.Label.Text = "humidity"
+	p.Title.Text = "co2 @around tama river"
+	p.Y.Label.Text = "co2"
 	p.X.Label.Text = "date"
 	p.X.Tick.Marker = plot.TimeTicks{Format: "2006-01-02\n15:04"}
 
 	return &Plot{
 		Plot:        p,
-		imagePath:   humidityImagePath,
+		imagePath:   co2ImagePath,
 		lineColor:   color.RGBA{G: 255, B: 255, A: 255},
 		pointsColor: color.RGBA{R: 255, A: 255},
 	}
@@ -193,7 +193,7 @@ type retEnv struct {
 }
 
 func encode() (string, error) {
-	encoded, err := encodeImageToBase64(humidityImagePath)
+	encoded, err := encodeImageToBase64(co2ImagePath)
 	if err != nil {
 		return "", err
 	}

@@ -33,6 +33,7 @@ type environment struct {
 	Pressure    []datum `json:"pressure"`
 	Temperature []datum `json:"temperature"`
 	Humidity    []datum `json:"humidity"`
+	CO2         []datum `json:"co2"`
 }
 
 type datum struct {
