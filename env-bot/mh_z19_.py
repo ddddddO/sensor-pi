@@ -10,7 +10,7 @@ class Repository:
 	def __init__(self, dsn) -> None:
 		self.conn = sqlite3.connect(dsn)
 
-	def fetch(self) -> (float, float, float):
+	def fetch(self) -> float:
 		mh_z19 = Table('mh_z19')
 		q = Query.from_(mh_z19)\
 			.select(mh_z19.co2)\
