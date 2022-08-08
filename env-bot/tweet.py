@@ -67,9 +67,10 @@ if __name__ == '__main__':
 	received_temperature = False
 	received_pressure = False
 	received_humidity = False
+	received_co2 = False
 
 	while True:
-		if received_temperature and received_pressure and received_humidity:
+		if received_temperature and received_pressure and received_humidity and received_co2:
 			break
 
 		try:
@@ -87,6 +88,10 @@ if __name__ == '__main__':
 				latest_value_h = latest_value
 				received_humidity = True
 
+			if type == 'co2':
+				latest_value_c = latest_value
+				received_co2 = True
+
 			decode_to_file(type, encoded)
 			delete_message(type, receipt_handle)
 
@@ -100,12 +105,13 @@ if __name__ == '__main__':
 			continue
 
 	try:
-		title = 'ただいまの気温・気圧・湿度'
+		title = 'ただいまの気温・気圧・湿度・CO2濃度'
 		location = '@多摩川付近(屋内)'
 		temp = "temperature : {:-6.2f} ℃".format(latest_value_t)
 		pressure = "pressure : %7.2f hPa" % (latest_value_p)
 		hum = "humidity : %6.2f ％" % (latest_value_h)
-		content = title + location + '\n' + temp + '\n' + pressure + '\n' + hum
+		co2 = "co2 : %6.2f ppm" % (latest_value_c)
+		content = title + location + '\n' + temp + '\n' + pressure + '\n' + hum + '\n' + co2
 
 		auth = tweepy.OAuthHandler(settings.consumer_key, settings.consumer_secret)
 		auth.set_access_token(settings.token, settings.token_secret)
@@ -118,6 +124,9 @@ if __name__ == '__main__':
 		status = api.update_status_with_media(in_reply_to_status_id=status.id, status='', filename=image_path)
 
 		image_path = '/tmp/humidity.png'
+		status = api.update_status_with_media(in_reply_to_status_id=status.id, status='', filename=image_path)
+
+		image_path = '/tmp/co2.png'
 		status = api.update_status_with_media(in_reply_to_status_id=status.id, status='', filename=image_path)
 
 	except Exception as err:
