@@ -9,6 +9,7 @@ from diagrams.saas.social import Twitter
 
 with Diagram("ENV-Tweet-Bot", show=False, outformat="png"):
   bme280 = Server("bme280\n(sensor)")
+  mh_z19 = Server("mh_z19\n(sensor)")
 
   green_edge = Edge(color="darkgreen")
   brown_edge = Edge(color="brown")
@@ -16,23 +17,27 @@ with Diagram("ENV-Tweet-Bot", show=False, outformat="png"):
 
   with Cluster("Raspberry Pi 4"):
     prog1 = Python("Get and Store\nsensor value")
+    prog4 = Python("Get and Store\nsensor value")
     db = SQL("SQLite3")
     prog2 = Go("Fetch and Publish\nenv data\n(10 records)")
     prog3 = Python("Pull and Decode\nimage data\nand Post tweet")
 
   with Cluster("AWS"):
-    sns = SNS("pressure/\nhumidity/\ntemperature data")
+    sns = SNS("pressure/\nhumidity/\ntemperature and co2 data")
 
     with Cluster("Generate image"):
       svc_group = [Lambda("pressure"),
                   Lambda("humidity"),
-                  Lambda("temperature")]
+                  Lambda("temperature"),
+                  Lambda("co2")]
 
     sqs = SQS("encoded base64\nimage data")
 
   twitter = Twitter("Twitter")
 
-  bme280 >> black_edge >> prog1 >> black_edge >> black_edge >> db >> black_edge >> prog2 >> black_edge >> sns
+  bme280 >> black_edge >> prog1 >> black_edge >> db
+  mh_z19 >> black_edge >> prog4 >> black_edge >> db
+  db >> black_edge >> prog2 >> black_edge >> sns
   sns >> green_edge >> svc_group
   svc_group >> green_edge >> sqs >> brown_edge >> prog3
   prog3 >> black_edge >> twitter

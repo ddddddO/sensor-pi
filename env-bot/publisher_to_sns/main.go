@@ -17,14 +17,6 @@ import (
 
 // ref: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/sns-example-publish.html
 func main() {
-	// Initialize a session that the SDK will use to load
-	// credentials from the shared credentials file. (~/.aws/credentials).
-	sess := session.Must(session.NewSessionWithOptions(session.Options{
-		SharedConfigState: session.SharedConfigEnable,
-	}))
-
-	svc := sns.New(sess)
-
 	env, err := fetchData()
 	if err != nil {
 		fmt.Println(err.Error())
@@ -37,6 +29,12 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Initialize a session that the SDK will use to load
+	// credentials from the shared credentials file. (~/.aws/credentials).
+	sess := session.Must(session.NewSessionWithOptions(session.Options{
+		SharedConfigState: session.SharedConfigEnable,
+	}))
+	svc := sns.New(sess)
 	msg := buf.String()
 	topicARN := "arn:aws:sns:ap-northeast-1:820544363308:dbdata_to_filegenerator"
 
@@ -56,6 +54,7 @@ type environment struct {
 	Pressure    []datum `json:"pressure"`
 	Temperature []datum `json:"temperature"`
 	Humidity    []datum `json:"humidity"`
+	CO2         []datum `json:"co2"`
 }
 
 type datum struct {
@@ -68,6 +67,7 @@ type env struct {
 	T float64 `db:"temperature"`
 	P float64 `db:"pressure"`
 	H float64 `db:"humidity"`
+	C float64 `db:"co2"`
 }
 
 func fetchData() (*environment, error) {
@@ -117,11 +117,44 @@ func fetchData() (*environment, error) {
 	if err := rows.Err(); err != nil {
 		return nil, err
 	}
+	queryMHZ19 := sq.Select("date", "co2").
+		From("mh_z19").
+		OrderBy("date desc").
+		Limit(limit)
+	sqlMHZ19, argsMHZ19, err := queryMHZ19.ToSql()
+	if err != nil {
+		return nil, err
+	}
 
+	rowsMHZ19, err := db.Queryx(sqlMHZ19, argsMHZ19...)
+	if err != nil {
+		return nil, err
+	}
+	defer rowsMHZ19.Close()
+
+	var (
+		dataC = []datum{} // for co2
+	)
+	for rowsMHZ19.Next() {
+		e := &env{}
+		if err := rowsMHZ19.StructScan(e); err != nil {
+			return nil, err
+		}
+		tm, err := time.Parse(layout, e.D)
+		if err != nil {
+			return nil, err
+		}
+
+		dataC = append(dataC, datum{T: tm, Value: e.C})
+	}
+	if err := rowsMHZ19.Err(); err != nil {
+		return nil, err
+	}
 	e := &environment{
 		Pressure:    dataP,
 		Temperature: dataT,
 		Humidity:    dataH,
+		CO2:         dataC,
 	}
 	return e, nil
 }

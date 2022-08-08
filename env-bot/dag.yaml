@@ -4,14 +4,19 @@ env:
   AWS_SHARED_CREDENTIALS_FILE: "/home/pi/.aws/credentials"
   AWS_CONFIG_FILE: "/home/pi/.aws/config"
 steps:
-  - name: "sensor"
+  - name: "sensor_bme280"
     description: "get and store data from bme280"
     command: "/home/pi/github.com/ddddddO/sensor-pi/env-bot/bme280.py"
+  - name: "sensor_mhz19"
+    description: "get and store data from mh_z19"
+    command: "sudo -E /home/pi/github.com/ddddddO/sensor-pi/env-bot/mh_z19_.py"
+
   - name: "publisher_to_sns"
     description: "environment data to AmazonSNS"
     command: "/home/pi/github.com/ddddddO/sensor-pi/env-bot/publisher_to_sns/publisher_to_sns"
     depends:
-      - "sensor"
+      - "sensor_bme280"
+      - "sensor_mhz19"
   - name: "wait"
     description: "wait"
     command: "sleep 60"
