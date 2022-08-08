@@ -1,10 +1,13 @@
-#!/usr/bin/env python3
+#!/usr/local/bin/python3.8
 
+import sys
+sys.path.append('/home/pi/.local/lib/python3.8/site-packages')
+
+from pypika import Query, Table, Order
 import mh_z19
 import os
 import datetime
 import sqlite3
-from pypika import Query, Table, Order
 
 class Repository:
 	def __init__(self, dsn) -> None:
