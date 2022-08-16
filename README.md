@@ -19,13 +19,14 @@
 ### 実行基盤
 - cronと[**Dagu**](https://github.com/yohamta/dagu)を利用。
 - 各実行コマンドの依存を[YAMLファイル](dag.yaml)に記載しDaguを実行する。
-- Daguにはserverサブコマンドがあり、依存関係を視覚的に確認もできる。
+- Daguにはserverサブコマンドがあり、依存関係も視覚的に確認できる。
   - ![](env-bot/doc/dagu.png)
 
 ### Tweet
 ![](env-bot/doc/tweet_1.png)
 ![](env-bot/doc/tweet_2.png)
 ![](env-bot/doc/tweet_3.png)
+![](env-bot/doc/tweet_4.png)
 
 # 扱うsensor
 ![](image/sensor.jpg)
