@@ -19,7 +19,7 @@ steps:
       - "sensor_mhz19"
   - name: "wait"
     description: "wait"
-    command: "sleep 60"
+    command: "sleep 3"
     depends:
       - "publisher_to_sns"
   - name: "tweet"
