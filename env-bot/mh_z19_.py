@@ -41,7 +41,7 @@ class Repository:
 		self.conn.close()
 
 
-ret = mh_z19.read()
+ret = mh_z19.read_from_pwm()
 co2 = ret['co2'] # TODO: KeyError handling. retryする？
 
 dsn = os.getenv('DSN')
