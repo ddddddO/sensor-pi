@@ -11,3 +11,10 @@ tweet:
 # Create table: execute schema.sql TODO: using migration tool
 conn:
 	sqlite3 environment.sqlite3
+
+# mh_z19の動作確認
+test_mhz:
+	sudo python3 -m mh_z19
+
+test_bme:
+	sudo python3 ../bme280.py
