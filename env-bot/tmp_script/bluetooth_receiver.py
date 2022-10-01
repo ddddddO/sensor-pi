@@ -15,12 +15,11 @@ while True:
                     print(event.code)
 
                     if event.code == evdev.ecodes.KEY_VOLUMEUP:
-                        # subprocess.Popen(['mpg321', 'decision3.mp3'])
                         print('Up!')
 
-                    if event.code == evdev.ecodes.KEY_ENTER:
-                        # subprocess.Popen(['amixer', 'sset', 'PCM', '10%-', '-M'])
-                        print('Down!')
+                    # if event.code == evdev.ecodes.KEY_ENTER:
+                    #    subprocess.Popen(['amixer', 'sset', 'PCM', '10%-', '-M'])
+                    #    print('Down!')
     except:
         print('Retry...')
         time.sleep(1)
