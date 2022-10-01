@@ -56,6 +56,7 @@
 ### Bluetoothリモコンシャッター
 - [このツイート](https://twitter.com/sozoraemon/status/1574969255208325125?s=20&t=i2r26kbyVx00GJu13hcrzw)にインスパイアされて購入。
 - ボタンを押して、その時の計測値とグラフをツイートするようにした。
+- [作業風景](https://twitter.com/ddddddOpppppp/status/1576025254719168512?s=20&t=i2r26kbyVx00GJu13hcrzw)
 - ![](image/remocon.jpg)
 - ![](image/remocon_description.jpg)
 
