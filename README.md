@@ -81,3 +81,4 @@
   - ref: https://rcmdnk.com/blog/2021/02/18/computer-iot-raspberrypi/
   - /boot/config.txtに以下を追記しrebootする
     - `dtoverlay=disable-bt`
+      - 2022/10/01 に「Bluetoothリモコンシャッター」を使いたいため、コメントアウトした。
