@@ -12,7 +12,7 @@ from diagrams.gcp.devtools import Scheduler
 with Diagram("ENV-Tweet-Bot", show=False, outformat="png"):
   bme280 = Server("bme280\n(sensor)")
   mh_z19 = Server("mh_z19\n(sensor)")
-  bt_remote_controller = IotButton("Bluetooth remocon")
+  bt_remote_controller = IotButton("Bluetooth remocon\n(not AWS IotButton)")
 
   green_edge = Edge(color="darkgreen")
   brown_edge = Edge(color="brown")
@@ -20,7 +20,7 @@ with Diagram("ENV-Tweet-Bot", show=False, outformat="png"):
 
   with Cluster("Raspberry Pi 4"):
     cron = Scheduler("Execute Dagu\nat 9 and 18\n(not GCP Scheduler)")
-    bt_receiver = Python("Receive bluetooth \nand Execute Dagu\n(not AWS IotButton)")
+    bt_receiver = Python("Receive bluetooth \nand Execute Dagu")
 
     with Cluster("Managed by Dagu"):
       prog1 = Python("Get and Store\nsensor value")
