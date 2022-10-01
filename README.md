@@ -40,7 +40,6 @@
   - ![](image/mh-z19_haisen.jpg)
 
 
-
 ### ACEIRMC BME280搭載 温湿度 気圧センサーモジュール 5V用 SPI I2C Arduino対応 Raspberry Pi 4個入り
 - 画像の紫色のセンサー
 - 2022/05/03購入。4個で5099円
@@ -49,6 +48,13 @@
 - https://github.com/nozo-moto/mhz19-bme280-go#how-to-move
   - リンク先の配線で動作確認済み
   - ![](image/bme280_haisen.jpg)
+
+
+### Bluetoothリモコンシャッター
+- [このツイート](https://twitter.com/sozoraemon/status/1574969255208325125?s=20&t=i2r26kbyVx00GJu13hcrzw)にインスパイアされて購入。
+- ボタンを押して、その時の計測値とグラフをツイートするようにした。
+- ![](image/remocon.jpg)
+- ![](image/remocon_description.jpg)
 
 
 # Links
@@ -82,3 +88,4 @@
   - /boot/config.txtに以下を追記しrebootする
     - `dtoverlay=disable-bt`
       - 2022/10/01 に「Bluetoothリモコンシャッター」を使いたいため、コメントアウトした。
+        - そのままの状態で、uartではなくpwmで通信することで対処した。
