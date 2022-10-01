@@ -17,7 +17,7 @@ test_mhz_uart:
 	sudo python3 -m mh_z19
 
 test_mhz_pwm:
-	python3 -m mh_z19 --pwm
+	python3 -m mh_z19 --pwm --pwm_gpio 12
 
 test_bme:
 	sudo python3 ../bme280.py
