@@ -18,10 +18,6 @@ while True:
                     if event.code == evdev.ecodes.KEY_VOLUMEUP:
                         print('Received!')
                         subprocess.Popen(['/home/pi/go/bin/dagu', 'start', '/home/pi/github.com/ddddddO/sensor-pi/env-bot/dag.yaml'])
-
-                    # if event.code == evdev.ecodes.KEY_ENTER:
-                    #    subprocess.Popen(['amixer', 'sset', 'PCM', '10%-', '-M'])
-                    #    print('Down!')
     except:
         print('Retry...')
         time.sleep(1)
