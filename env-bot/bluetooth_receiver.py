@@ -1,7 +1,7 @@
 # ref: https://monomonotech.jp/kurage/raspberrypi/daiso_btshutter.html
 from asyncio import subprocess
 import evdev
-# import subprocess
+import subprocess
 import time
 
 while True:
