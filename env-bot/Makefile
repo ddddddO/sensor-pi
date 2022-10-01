@@ -12,6 +12,9 @@ tweet:
 conn:
 	sqlite3 environment.sqlite3
 
+receive_bt:
+	python3 bluetooth_receiver.py &
+
 # mh_z19の動作確認
 test_mhz_uart:
 	sudo python3 -m mh_z19
