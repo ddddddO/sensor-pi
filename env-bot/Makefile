@@ -13,8 +13,11 @@ conn:
 	sqlite3 environment.sqlite3
 
 # mh_z19の動作確認
-test_mhz:
+test_mhz_uart:
 	sudo python3 -m mh_z19
+
+test_mhz_pwm:
+	python3 -m mh_z19 --pwm
 
 test_bme:
 	sudo python3 ../bme280.py
