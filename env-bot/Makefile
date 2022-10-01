@@ -12,6 +12,7 @@ tweet:
 conn:
 	sqlite3 environment.sqlite3
 
+# NOTE: 手動実行する場合は、直接「python3 bluetooth_receiver.py &」。
 receive_bt:
 	python3 bluetooth_receiver.py &
 
