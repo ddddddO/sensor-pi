@@ -67,10 +67,11 @@
 - http://www.dododo.site/posts/raspberry-pi-4%E3%82%92lab%E3%81%AB%E3%81%99%E3%82%8B/
 - https://github.com/ddddddO/embedded-using-wio_terminal
 - [作業風景](https://twitter.com/dddddO60664252/status/1521839460744560641?s=20&t=knhCAdHZW9eIZJTtrOVSxA)
+- [紹介記事](https://zenn.dev/ddddddo/articles/1c0f022b31ffb5)
 
 - [raspberry pi GPIO](https://deviceplus.jp/raspberrypi/raspberrypi-gpio/)
   - ![](image/raspberrypi-gpio.png)
-- 「RaspberryPiで学ぶ電子工作(https://bluebacks.kodansha.co.jp/books/9784065193396/appendix/)」
+- 「[RaspberryPiで学ぶ電子工作](https://bluebacks.kodansha.co.jp/books/9784065193396/appendix/)」
   - I2C(p159~)
     - シリアル通信と呼ばれるデータ通信方式の一つ
     - I2C通信を使うと、デジタル値を出力するセンサを多数扱える
