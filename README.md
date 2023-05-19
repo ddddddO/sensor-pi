@@ -64,7 +64,6 @@
 # Links
 - 「エキスパートたちのGo言語」の「Raspberry PiによるCO2、温湿度、気圧のモニタリング」p219~ をやっていく。
   - https://github.com/nozo-moto/mhz19-bme280-go
-- http://www.dododo.site/posts/raspberry-pi-4%E3%82%92lab%E3%81%AB%E3%81%99%E3%82%8B/
 - https://github.com/ddddddO/embedded-using-wio_terminal
 - [作業風景](https://twitter.com/dddddO60664252/status/1521839460744560641?s=20&t=knhCAdHZW9eIZJTtrOVSxA)
 - [紹介記事](https://zenn.dev/ddddddo/articles/1c0f022b31ffb5)
